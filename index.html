@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Bambino Stock</title>
+<title>KP Cleaning Stock</title>
 
 <style>
 /* Evita zoom al hacer double-tap o pinch */
@@ -15,19 +15,22 @@ html, body {
 body{
   font-family:Arial;
   font-size:20px;
-  padding:30px;
+  padding:20px;
   text-align:center;
+  max-width:800px;
+  margin:0 auto;
 }
 
 .logo{
-  width:200px;
+  width:150px;
   display:block;
   margin:auto;
-  margin-bottom:15px;
+  margin-bottom:10px;
 }
 
 h2{
   margin-bottom:5px;
+  font-size:24px;
 }
 
 .date{
@@ -40,11 +43,24 @@ h2{
   display:grid;
   grid-template-columns:auto 60px 90px 60px 120px;
   align-items:center;
-  gap:14px;
-  margin-bottom:24px;
-  max-width:650px;
-  margin-left:auto;
-  margin-right:auto;
+  gap:10px;
+  margin-bottom:20px;
+  padding:10px;
+  background:#f9f9f9;
+  border-radius:8px;
+}
+
+.row-with-image {
+  grid-template-columns:80px auto 60px 90px 60px 120px;
+}
+
+.product-image {
+  width:70px;
+  height:70px;
+  object-fit:contain;
+  border-radius:5px;
+  background:white;
+  padding:5px;
 }
 
 .ingredientBox{
@@ -53,10 +69,11 @@ h2{
 
 .ingredient{
   font-weight:600;
+  font-size:18px;
 }
 
 .unit{
-  font-size:14px;
+  font-size:13px;
   color:#666;
   margin-top:2px;
 }
@@ -65,6 +82,14 @@ input{
   width:70px;
   font-size:22px;
   text-align:center;
+  padding:5px;
+  border:2px solid #ddd;
+  border-radius:5px;
+}
+
+input:disabled{
+  background:#e9ecef;
+  color:#666;
 }
 
 input::-webkit-outer-spin-button,
@@ -78,47 +103,132 @@ input[type=number]{
 }
 
 button{
-  font-size:22px;
+  font-size:20px;
   padding:8px 16px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  background:#007bff;
+  color:white;
+  transition:0.3s;
+}
+
+button:hover:not(:disabled){
+  background:#0056b3;
+}
+
+button:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+button.minus-btn{
+  background:#dc3545;
+}
+
+button.minus-btn:hover:not(:disabled){
+  background:#c82333;
+}
+
+button.plus-btn{
+  background:#28a745;
+}
+
+button.plus-btn:hover:not(:disabled){
+  background:#218838;
 }
 
 .order{
   text-align:left;
+  padding:5px 10px;
+  background:#e8f5e9;
+  border-radius:5px;
 }
 
 .order .ingredient{
   font-weight:600;
-  font-size:22px;
+  font-size:18px;
   display:inline;
 }
 
 .order .unit{
-  font-size:14px;
+  font-size:13px;
   color:#666;
   margin-left:6px;
   display:inline;
 }
 
 #submitBtn{
-  font-size:26px;
+  font-size:24px;
   padding:14px 40px;
-  margin-top:25px;
+  margin:25px auto;
   display:block;
-  margin:auto;
+  background:#28a745;
+}
+
+#submitBtn:hover:not(:disabled){
+  background:#218838;
 }
 
 #resetBtn {
-  font-size:20px;         /* un poquito más chico */
-  padding:10px 26px;      /* más compacto */
-  display:block;           /* para poder centrarlo con margin */
-  margin:20px auto;        /* 20px arriba y abajo, auto a los lados => centrado */
-  display:none;            /* inicialmente oculto hasta que se haga submit */
+  font-size:18px;
+  padding:10px 30px;
+  display:block;
+  margin:20px auto;
+  display:none;
+  background:#ffc107;
+  color:#333;
+}
+
+#resetBtn:hover:not(:disabled){
+  background:#e0a800;
 }
 
 .note{
   margin-top:18px;
-  font-size:18px;
+  font-size:16px;
   color:#444;
+  padding:15px;
+  background:#fff3cd;
+  border-radius:8px;
+  border:1px solid #ffc107;
+}
+
+.loading{
+  font-size:18px;
+  color:#666;
+  padding:40px;
+}
+
+@media (max-width: 650px) {
+  .row{
+    grid-template-columns:auto 50px 70px 50px 100px;
+    gap:8px;
+    font-size:16px;
+  }
+  
+  .row-with-image {
+    grid-template-columns:60px auto 50px 70px 50px 100px;
+  }
+  
+  .product-image {
+    width:50px;
+    height:50px;
+  }
+  
+  .ingredient{
+    font-size:15px;
+  }
+  
+  input{
+    width:60px;
+    font-size:18px;
+  }
+  
+  button{
+    font-size:16px;
+    padding:6px 12px;
+  }
 }
 </style>
 </head>
@@ -127,51 +237,78 @@ button{
 
 <img src="icon.png" class="logo">
 
-<h2>Stephens Daily Stock</h2>
+<h2>🧹 KP Cleaning Stock</h2>
 
 <div id="todayDate" class="date"></div>
 
-<div id="lastSubmit" class="date" style="font-size:16px;"></div>
+<div id="lastSubmit" class="date" style="font-size:16px;color:#28a745;"></div>
 
-<button id="resetBtn" onclick="newForm()">NEW STOCK</button>
+<button id="resetBtn" onclick="newForm()">🔄 NEW STOCK</button>
 
 <div id="form"></div>
 
-<button id="submitBtn" onclick="submitStock()">SUBMIT</button>
+<button id="submitBtn" onclick="submitStock()">✅ SUBMIT</button>
 
 <div class="note">
-Check again that everything is correct before submitting.
+⚠️ Check again that everything is correct before submitting.<br>
+<small>Make sure all fields are filled in.</small>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw__xtFbjLgxo3eAGqr5D9z-3vmf3xfyWagPpfOFyanaIKWF3nc8NjdVcRdNnr_buLa/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzX5y0wQbn8G-70c8Kc9qD3JPDOHbq0yJosyredmp9jS0Mo9BMR_pgJbLk5Ty5uEJSh/exec";
+
+// Producto que tendrá imagen (puedes cambiar el nombre)
+const PRODUCT_WITH_IMAGE = "Blue Roll 1x6 (Bail)";
 
 function setDate(){
   const today = new Date();
   const options = { weekday:'long', day:'numeric', month:'long' };
   document.getElementById("todayDate").innerText =
-    today.toLocaleDateString('en-GB',options);
+    today.toLocaleDateString('en-GB', options);
 }
 
 async function loadIngredients(){
-  const res = await fetch(`${SCRIPT_URL}?action=getIngredients`);
-  const data = await res.json();
-  showForm(data);
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getCleaningProducts`);
+    const data = await res.json();
+    showForm(data);
+  } catch(error) {
+    document.getElementById("form").innerHTML = 
+      '<div class="loading">❌ Error loading products. Please refresh.</div>';
+    console.error("Error:", error);
+  }
 }
 
 function showForm(data){
   const container = document.getElementById("form");
   container.innerHTML = "";
+  
   data.forEach(item=>{
     const div = document.createElement("div");
     div.className = "row";
-    div.innerHTML = `
+    
+    // Si es el producto con imagen, añadir clase extra
+    if(item.name === PRODUCT_WITH_IMAGE) {
+      div.className += " row-with-image";
+    }
+    
+    let html = '';
+    
+    // Imagen si es el producto específico
+    if(item.name === PRODUCT_WITH_IMAGE) {
+      html += `
+        <img src="blue_roll.jpg" class="product-image" alt="${item.name}" 
+             onerror="this.style.display='none'">
+      `;
+    }
+    
+    html += `
       <div class="ingredientBox">
         <div class="ingredient">${item.name}</div>
         <div class="unit">${item.unit || ""}</div>
       </div>
 
-      <button onclick="change('${item.name}',-1)">-</button>
+      <button class="minus-btn" onclick="change('${item.name}',-1)">−</button>
 
       <input 
         type="number"
@@ -180,32 +317,38 @@ function showForm(data){
         inputmode="numeric"
         pattern="[0-9]*"
         onkeydown="moveNext(event)"
+        placeholder="0"
       >
 
-      <button onclick="change('${item.name}',1)">+</button>
+      <button class="plus-btn" onclick="change('${item.name}',1)">+</button>
 
       <div class="order" id="order_${item.name}"></div>
     `;
+    
+    div.innerHTML = html;
     container.appendChild(div);
   });
-  const firstInput=document.querySelector("input");
+  
+  // Enfocar el primer input
+  const firstInput = document.querySelector("input");
   if(firstInput) firstInput.focus();
 }
 
-function change(id,val){
-  const input=document.getElementById(id);
-  let current = Number(input.value)||0;
+function change(id, val){
+  const input = document.getElementById(id);
+  if(!input || input.disabled) return;
+  let current = Number(input.value) || 0;
   current += val;
   if(current < 0) current = 0;
   input.value = current;
 }
 
 function moveNext(event){
-  if(event.key==="Enter"){
+  if(event.key === "Enter"){
     event.preventDefault();
     const inputs = Array.from(document.querySelectorAll("input"));
     const index = inputs.indexOf(event.target);
-    if(index>-1 && index<inputs.length-1){
+    if(index > -1 && index < inputs.length - 1){
       inputs[index+1].focus();
     }
   }
@@ -213,76 +356,101 @@ function moveNext(event){
 
 async function submitStock(){
   const inputs = document.querySelectorAll("input");
-  const data=[];
-  let missing=false;
-  inputs.forEach(i=>{
-    if(i.value==="") missing=true;
-    data.push({ name:i.id, qty:Number(i.value) });
+  const data = [];
+  let missing = false;
+  
+  inputs.forEach(i => {
+    if(i.value === "" || i.value === null) {
+      missing = true;
+    }
+    data.push({ 
+      name: i.id, 
+      qty: Number(i.value) || 0 
+    });
   });
+  
   if(missing){
-    alert("Please fill in all stock levels before submitting.");
+    alert("⚠️ Please fill in all stock levels before submitting.");
     return;
   }
 
-  // Bloquear inputs inmediatamente al confirmar submit
   const confirmSubmit = confirm("Are you sure chef?");
   if(!confirmSubmit) return;
 
-  inputs.forEach(i=>i.disabled=true);
-  document.querySelectorAll("button").forEach(b=>{
-    if(b.id !== "resetBtn") b.disabled=true;
+  // Bloquear inputs y botones
+  inputs.forEach(i => i.disabled = true);
+  document.querySelectorAll("button").forEach(b => {
+    if(b.id !== "resetBtn") b.disabled = true;
   });
 
-  const res = await fetch(`${SCRIPT_URL}?action=submitStock&data=${encodeURIComponent(JSON.stringify(data))}`);
-  const result = await res.json();
-  showResult(result);
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=submitCleaningStock&data=${encodeURIComponent(JSON.stringify(data))}`);
+    const result = await res.json();
+    showResult(result);
+  } catch(error) {
+    alert("❌ Error submitting. Please try again.");
+    console.error("Error:", error);
+    // Re-habilitar si hay error
+    inputs.forEach(i => i.disabled = false);
+    document.querySelectorAll("button").forEach(b => {
+      if(b.id !== "resetBtn") b.disabled = false;
+    });
+  }
 }
 
 function showResult(data){
-  document.getElementById("submitBtn").style.display="none";
-  document.getElementById("resetBtn").style.display="block";
+  document.getElementById("submitBtn").style.display = "none";
+  document.getElementById("resetBtn").style.display = "block";
 
   const now = new Date();
   const options = { weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' };
-  document.getElementById("lastSubmit").innerText =
-    "Last stock submitted: " + now.toLocaleDateString('en-GB',options);
+  document.getElementById("lastSubmit").innerHTML = 
+    "✅ Last stock submitted: " + now.toLocaleDateString('en-GB', options);
 
-  data.forEach(item=>{
-    const input=document.getElementById(item.prep);
-    input.disabled=true;
-    const container=document.getElementById("order_"+item.prep);
+  data.forEach(item => {
+    const input = document.getElementById(item.prep);
+    if(input) input.disabled = true;
+    
+    const container = document.getElementById("order_" + item.prep);
+    if(!container) return;
+    
     const qty = item.order;
     let unitText = item.unit || "";
-    if(qty !== 1 && unitText){
-      if(unitText.endsWith("y")) unitText = unitText.slice(0,-1)+"ies";
-      else if(!unitText.endsWith("s")) unitText += "s";
+    
+    // Pluralizar si es necesario
+    if(qty !== 1 && unitText && !unitText.includes("/")) {
+      if(unitText.endsWith("y")) unitText = unitText.slice(0,-1) + "ies";
+      else if(!unitText.endsWith("s") && unitText !== "x" && !unitText.includes(" ")) {
+        unitText += "s";
+      }
     }
-    container.innerHTML =
-      `<span class="ingredient">Order: ${qty}</span>
-       <span class="unit">${unitText}</span>`;
+    
+    container.innerHTML = `
+      <span class="ingredient">📦 Order: ${qty}</span>
+      <span class="unit">${unitText}</span>
+    `;
   });
 }
 
 function newForm(){
-  document.getElementById("submitBtn").style.display="block";
-  document.getElementById("resetBtn").style.display="none";
-  document.getElementById("lastSubmit").innerText="";
+  document.getElementById("submitBtn").style.display = "block";
+  document.getElementById("resetBtn").style.display = "none";
+  document.getElementById("lastSubmit").innerHTML = "";
 
   const inputs = document.querySelectorAll("input");
-  inputs.forEach(i=>{
-    i.disabled=false;
-    i.value="";
+  inputs.forEach(i => {
+    i.disabled = false;
+    i.value = "";
   });
 
   const orders = document.querySelectorAll(".order");
-  orders.forEach(o=>o.innerHTML="");
+  orders.forEach(o => o.innerHTML = "");
 
-  const firstInput=document.querySelector("input");
+  const firstInput = document.querySelector("input");
   if(firstInput) firstInput.focus();
 
-  // Re-habilitar botones
-  document.querySelectorAll("button").forEach(b=>{
-    if(b.id !== "resetBtn") b.disabled=false;
+  document.querySelectorAll("button").forEach(b => {
+    if(b.id !== "resetBtn") b.disabled = false;
   });
 }
 
