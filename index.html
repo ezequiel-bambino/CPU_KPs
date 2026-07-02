@@ -33,12 +33,14 @@ h2{
   margin-bottom:3px;
   font-size:22px;
   color:#333;
+  text-align:center;
 }
 
 .date{
   font-size:16px;
   color:#666;
   margin-bottom:8px;
+  text-align:center;
 }
 
 /* Contenedor de cada producto */
@@ -52,7 +54,7 @@ h2{
 
 /* Primera fila: nombre del producto */
 .product-header {
-  text-align:left;
+  text-align:center;
   margin-bottom:10px;
   padding-bottom:8px;
   border-bottom:2px solid #f0f0f0;
@@ -74,8 +76,8 @@ h2{
 /* Segunda fila: imagen y controles */
 .product-controls {
   display:grid;
-  grid-template-columns:70px 1fr;
-  gap:10px;
+  grid-template-columns:80px 1fr;
+  gap:12px;
   align-items:center;
 }
 
@@ -86,8 +88,8 @@ h2{
 }
 
 .product-image {
-  width:60px;
-  height:60px;
+  width:75px;
+  height:75px;
   object-fit:cover;
   border-radius:8px;
   border:2px solid #eee;
@@ -141,13 +143,15 @@ h2{
 
 .controls-grid input {
   width:100%;
-  font-size:20px;
+  font-size:22px;
   text-align:center;
-  padding:10px 5px;
+  padding:8px 4px;
   border:2px solid #ddd;
   border-radius:8px;
   height:50px;
   box-sizing:border-box;
+  max-width:120px;
+  margin:0 auto;
 }
 
 .controls-grid input:disabled {
@@ -171,12 +175,13 @@ h2{
   padding:8px 12px;
   background:#e8f5e9;
   border-radius:6px;
-  text-align:left;
+  text-align:center;
   font-size:15px;
   border-left:4px solid #4caf50;
   min-height:30px;
   display:flex;
   align-items:center;
+  justify-content:center;
 }
 
 .order-result .order-label {
@@ -253,12 +258,14 @@ h2{
   background:#fff3cd;
   border-radius:8px;
   border:1px solid #ffc107;
+  text-align:center;
 }
 
 .loading {
   font-size:16px;
   color:#666;
   padding:30px;
+  text-align:center;
 }
 
 #lastSubmit {
@@ -268,18 +275,19 @@ h2{
   padding:8px;
   background:#e8f5e9;
   border-radius:6px;
+  text-align:center;
 }
 
 /* Responsive para móviles muy pequeños */
 @media (max-width: 400px) {
   .product-controls {
-    grid-template-columns:55px 1fr;
+    grid-template-columns:65px 1fr;
     gap:8px;
   }
   
   .product-image {
-    width:50px;
-    height:50px;
+    width:60px;
+    height:60px;
   }
   
   .controls-grid {
@@ -296,11 +304,24 @@ h2{
   .controls-grid input {
     font-size:18px;
     height:44px;
-    padding:8px 4px;
+    padding:6px 4px;
+    max-width:80px;
   }
   
   .product-name {
     font-size:14px;
+  }
+}
+
+/* Para tablets y pantallas más grandes */
+@media (min-width: 601px) {
+  .product-image {
+    width:85px;
+    height:85px;
+  }
+  
+  .controls-grid input {
+    max-width:100px;
   }
 }
 </style>
