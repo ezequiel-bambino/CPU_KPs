@@ -17,7 +17,7 @@ body{
   font-size:20px;
   padding:20px;
   text-align:center;
-  max-width:800px;
+  max-width:850px;
   margin:0 auto;
 }
 
@@ -48,6 +48,7 @@ h2{
   padding:10px;
   background:#f9f9f9;
   border-radius:8px;
+  transition:0.3s;
 }
 
 .row-with-image {
@@ -57,10 +58,11 @@ h2{
 .product-image {
   width:70px;
   height:70px;
-  object-fit:contain;
+  object-fit:cover;
   border-radius:5px;
   background:white;
-  padding:5px;
+  padding:3px;
+  border:1px solid #ddd;
 }
 
 .ingredientBox{
@@ -69,11 +71,12 @@ h2{
 
 .ingredient{
   font-weight:600;
-  font-size:18px;
+  font-size:16px;
+  line-height:1.2;
 }
 
 .unit{
-  font-size:13px;
+  font-size:12px;
   color:#666;
   margin-top:2px;
 }
@@ -111,10 +114,11 @@ button{
   background:#007bff;
   color:white;
   transition:0.3s;
+  min-width:45px;
 }
 
 button:hover:not(:disabled){
-  background:#0056b3;
+  transform:scale(1.05);
 }
 
 button:disabled{
@@ -143,16 +147,19 @@ button.plus-btn:hover:not(:disabled){
   padding:5px 10px;
   background:#e8f5e9;
   border-radius:5px;
+  min-height:30px;
+  display:flex;
+  align-items:center;
 }
 
 .order .ingredient{
   font-weight:600;
-  font-size:18px;
+  font-size:16px;
   display:inline;
 }
 
 .order .unit{
-  font-size:13px;
+  font-size:12px;
   color:#666;
   margin-left:6px;
   display:inline;
@@ -200,34 +207,41 @@ button.plus-btn:hover:not(:disabled){
   padding:40px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
   .row{
-    grid-template-columns:auto 50px 70px 50px 100px;
-    gap:8px;
-    font-size:16px;
+    grid-template-columns:auto 45px 60px 45px 90px;
+    gap:6px;
+    font-size:14px;
+    padding:8px;
   }
   
   .row-with-image {
-    grid-template-columns:60px auto 50px 70px 50px 100px;
+    grid-template-columns:50px auto 45px 60px 45px 90px;
   }
   
   .product-image {
-    width:50px;
-    height:50px;
+    width:45px;
+    height:45px;
   }
   
   .ingredient{
-    font-size:15px;
+    font-size:13px;
   }
   
   input{
-    width:60px;
-    font-size:18px;
+    width:50px;
+    font-size:16px;
+    padding:3px;
   }
   
   button{
-    font-size:16px;
-    padding:6px 12px;
+    font-size:14px;
+    padding:5px 10px;
+    min-width:35px;
+  }
+  
+  .order .ingredient{
+    font-size:13px;
   }
 }
 </style>
@@ -255,10 +269,26 @@ button.plus-btn:hover:not(:disabled){
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzX5y0wQbn8G-70c8Kc9qD3JPDOHbq0yJosyredmp9jS0Mo9BMR_pgJbLk5Ty5uEJSh/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAlXXQKPaCRp3_TscUJaa06EyjI3rf9snogPN3zsqXg3FepxINq8MGbwX4SDSH13EM/exec";
 
-// Producto que tendrá imagen (puedes cambiar el nombre)
-const PRODUCT_WITH_IMAGE = "Blue Roll 1x6 (Bail)";
+// Mapeo de productos a imágenes
+const PRODUCT_IMAGES = {
+  "Blue Roll 1x6 (Bail)": "blue rool.png",
+  "Toilet Roll 12x12 (bail)": "Toilet Roll 1.jpg",
+  "Hand Soap 5L": "hand soap.jpg",
+  "Wash 'n Walk 2x2Lt": "wash 'n walk.jpg",
+  "Mop Head Doubles": "mop head.jpg",
+  "Sponge Back Scourer": "sponge.jpg",
+  "Ecolab Epicare 5 Foam Hand Wash 750ml": "epicatre 5.jpg",
+  "Ecolab Oasis Pro 20 Premium 2 Litre": "ecolab oasis pro 20.jpg",
+  "Ecolab Solid Protect 4.5KG": "solid protect.jpg",
+  "CleanWorks Compostable Refuse Sack Clear 26x44": "CleanWorks Compostable.jpg",
+  "Country range large stainless steel scourers (10)": "Country range large stainless steel scourers.webp",
+  "Tuffguy Scourer RS Pack 10": "TUFFGUY SCOURER RS PACK 10.webp",
+  "Optimax Extra - Multi Purpse Kitchen Degreaser 750ml": "OPTIMAX EXTRA - MULTI PURPOSE KITCHEN DEGREASER 750ML 6.jpg",
+  "Ecolab Oasis Pro 16 Multi Purpose Cleaner": "Ecolab Oasis Pro 16 Multi Purpose Cleaner.jpg",
+  "Wheelie Bin Liner Black 46x54": "blak bag.jpg"
+};
 
 function setDate(){
   const today = new Date();
@@ -283,24 +313,28 @@ function showForm(data){
   const container = document.getElementById("form");
   container.innerHTML = "";
   
-  data.forEach(item=>{
+  data.forEach(item => {
     const div = document.createElement("div");
     div.className = "row";
     
-    // Si es el producto con imagen, añadir clase extra
-    if(item.name === PRODUCT_WITH_IMAGE) {
+    const hasImage = PRODUCT_IMAGES[item.name] !== undefined;
+    if(hasImage) {
       div.className += " row-with-image";
     }
     
     let html = '';
     
-    // Imagen si es el producto específico
-    if(item.name === PRODUCT_WITH_IMAGE) {
+    // Imagen si existe en el mapeo
+    if(hasImage) {
+      const imgName = PRODUCT_IMAGES[item.name];
       html += `
-        <img src="blue_roll.jpg" class="product-image" alt="${item.name}" 
-             onerror="this.style.display='none'">
+        <img src="${imgName}" class="product-image" alt="${item.name}" 
+             onerror="this.style.display='none'; this.parentElement.className=this.parentElement.className.replace('row-with-image','');">
       `;
     }
+    
+    // Escapar el nombre para usar en funciones JavaScript
+    const escapedName = item.name.replace(/'/g, "\\'");
     
     html += `
       <div class="ingredientBox">
@@ -308,7 +342,7 @@ function showForm(data){
         <div class="unit">${item.unit || ""}</div>
       </div>
 
-      <button class="minus-btn" onclick="change('${item.name}',-1)">−</button>
+      <button class="minus-btn" onclick="change('${escapedName}',-1)">−</button>
 
       <input 
         type="number"
@@ -318,9 +352,10 @@ function showForm(data){
         pattern="[0-9]*"
         onkeydown="moveNext(event)"
         placeholder="0"
+        data-name="${item.name}"
       >
 
-      <button class="plus-btn" onclick="change('${item.name}',1)">+</button>
+      <button class="plus-btn" onclick="change('${escapedName}',1)">+</button>
 
       <div class="order" id="order_${item.name}"></div>
     `;
@@ -335,12 +370,18 @@ function showForm(data){
 }
 
 function change(id, val){
+  // Buscar el input por ID (que es el nombre del producto)
   const input = document.getElementById(id);
   if(!input || input.disabled) return;
+  
   let current = Number(input.value) || 0;
   current += val;
   if(current < 0) current = 0;
   input.value = current;
+  
+  // Disparar evento change para actualizar
+  const event = new Event('change', { bubbles: true });
+  input.dispatchEvent(event);
 }
 
 function moveNext(event){
@@ -418,9 +459,9 @@ function showResult(data){
     let unitText = item.unit || "";
     
     // Pluralizar si es necesario
-    if(qty !== 1 && unitText && !unitText.includes("/")) {
+    if(qty !== 1 && unitText && !unitText.includes("/") && !unitText.includes("x")) {
       if(unitText.endsWith("y")) unitText = unitText.slice(0,-1) + "ies";
-      else if(!unitText.endsWith("s") && unitText !== "x" && !unitText.includes(" ")) {
+      else if(!unitText.endsWith("s")) {
         unitText += "s";
       }
     }
